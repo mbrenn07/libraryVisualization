@@ -40,7 +40,7 @@ export function MostCheckedOutBooksBarChart() {
         let bookToDataArr = [];
 
         Object.keys(bookToData).forEach((book) => {
-            bookToDataArr.push({book: bookToData[book][0], numCheckedOut: bookToData[book].length});
+            bookToDataArr.push({ book: bookToData[book][0], numCheckedOut: bookToData[book].length });
         });
 
         bookToDataArr.forEach((item) => {
@@ -56,9 +56,9 @@ export function MostCheckedOutBooksBarChart() {
         });
 
         bookToDataArr = bookToDataArr
-        .toSorted((a, b) => b.numCheckedOut - a.numCheckedOut)
-        .filter((item) => item.book.item_type == "RES2HR")
-        .slice(0, 20);
+            .toSorted((a, b) => b.numCheckedOut - a.numCheckedOut)
+            .filter((item) => item.book.item_type == "RES2HR")
+            .slice(0, 20);
 
         console.log(bookToDataArr);
 
@@ -91,8 +91,9 @@ export function MostCheckedOutBooksBarChart() {
             .attr("y", d => y(d.numCheckedOut))
             .attr("width", x.bandwidth())
             .attr("height", d => height - y(d.numCheckedOut))
-            .attr("fill", "lightcoral")
-            //try coloring by genre instead?
+            .attr("fill", "lightcoral") //try coloring by genre instead?
+            .append('title')
+            .text(d => "Copyright: " + d.book.bib_copyright_date + "\nTags: " + d.book.bib_subject_terms + "\nAbstract: " + d.book.bib_abstract)
     });
 
     return (
