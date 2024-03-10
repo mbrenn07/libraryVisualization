@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import * as d3 from "d3";
 import { useRef, useEffect } from "react";
-import constructionSpending from "./construction_spending.json";
+import libraryData from "./22-23libraryData.json";
 import styling from "./svg.css";
 
 
@@ -12,7 +12,7 @@ export function MostCheckedOutBooksBarChart() {
 
     const margin = { top: 0, right: 0, bottom: 0, left: 50 };
     const width = 600 - margin.left - margin.right;
-    const height = (700 - margin.top - margin.bottom) / 2;
+    const height = 400 - margin.top - margin.bottom;
 
     useEffect(() => {
         const svgElement = d3.select(ref.current);
@@ -27,81 +27,76 @@ export function MostCheckedOutBooksBarChart() {
                 "translate(" + margin.left + "," + margin.top + ")");
 
 
-        const formattedConstructionSpending = [];
+        const bookToData = {};
 
-        console.log(constructionSpending[0]);
-
-        //educational
-
-        constructionSpending.forEach((item) => {
-            formattedConstructionSpending.push({ x: new Date(item.time.year, item.time.month), y: item.annual.combined["religious"], yTotal: item.annual.combined["total construction"] });
+        libraryData.forEach((entry) => {
+            if (bookToData[entry.bib_id]) {
+                bookToData[entry.bib_id].push(entry);
+            } else {
+                bookToData[entry.bib_id] = [entry];
+            }
         });
 
-        const cpiJan2024 = 308.417;
+        let bookToDataArr = [];
 
-        formattedConstructionSpending.forEach((spendingItem) => {
-            cpi.forEach((cpiYear) => {
-                if (cpiYear.Year == spendingItem.x.getFullYear()) {
-                    spendingItem.yAdjusted = (cpiJan2024 * spendingItem.y) / cpiYear[Object.keys(cpiYear)[spendingItem.x.getMonth() + 1]];
-                    spendingItem.yTotal = (cpiJan2024 * spendingItem.yTotal) / cpiYear[Object.keys(cpiYear)[spendingItem.x.getMonth() + 1]];
-                }
-            });
+        Object.keys(bookToData).forEach((book) => {
+            bookToDataArr.push({book: bookToData[book][0], numCheckedOut: bookToData[book].length});
         });
 
-        // Add X axis --> it is a date format
-        const x = d3.scaleTime()
-            .domain([formattedConstructionSpending[0].x, formattedConstructionSpending[formattedConstructionSpending.length - 1].x])
-            .range([0, width]);
+        bookToDataArr.forEach((item) => {
+            item.book.bib_title = item.book.bib_title.split("|")[0];
+            if (item.book.bib_title.includes("/")) {
+                item.book.bib_title = item.book.bib_title.substring(0, item.book.bib_title.length - 2)
+            }
+
+            item.book.bib_subtitle = item.book.bib_subtitle.split("|")[0];
+            if (item.book.bib_subtitle.includes("/")) {
+                item.book.bib_subtitle = item.book.bib_subtitle.substring(0, item.book.bib_subtitle.length - 2)
+            }
+        });
+
+        bookToDataArr = bookToDataArr
+        .toSorted((a, b) => b.numCheckedOut - a.numCheckedOut)
+        .filter((item) => item.book.item_type == "RES2HR")
+        .slice(0, 20);
+
+        console.log(bookToDataArr);
+
+        const x = d3.scaleBand()
+            .range([0, width])
+            .domain(bookToDataArr.map((obj) => obj.book.bib_title + " " + obj.book.bib_subtitle))
+            .padding(0.2);
+
         svgElement.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
-            .attr("class", "axisColor");
+            .selectAll("text")
+            .attr("transform", "translate(-10,0)rotate(-45)")
+            .style("text-anchor", "end");
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, d3.max(formattedConstructionSpending, (item) => item.yTotal)])
+            .domain([0, d3.max(bookToDataArr, d => d.numCheckedOut)])
             .range([height, 0]);
 
         svgElement.append("g")
-            .call(d3.axisLeft(y))
-            .attr("class", "axisColor");
+            .call(d3.axisLeft(y));
 
-        //inflation adjusted line
-        svgElement.append("path")
-            .datum(formattedConstructionSpending)
-            .attr("fill", "none")
-            .attr("stroke", "lightcoral")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x((d) => x(d.x))
-                .y((d) => y(d.yTotal))
-            );
-
-        //2008 financial crisis
-        svgElement.append("line")
-            .attr("y1", 0)
-            .attr("y2", height)
-            .attr("x1", x(new Date(2008, 7, 15)))
-            .attr("x2", x(new Date(2008, 7, 15)))
-            .attr("stroke", "black")
-            .attr("stroke-dasharray", "5,5")
-            .attr("stroke-width", "2");
-
-        svgElement.append("text")
-            .attr("text-anchor", "middle")
-            .attr("x", (width / 2) + 60)
-            .attr("y", height - 35)
-            .text("2008 Financial Crisis");
-
-        svgElement.append("text")
-            .attr("text-anchor", "middle")
-            .attr("x", width / 2)
-            .attr("y", -5)
-            .text("U.S. Total Construction Spending (Jan 2024 Inflation Adjusted)");
+        // Bars 
+        svgElement.selectAll("mybar")
+            .data(bookToDataArr)
+            .enter()
+            .append("rect")
+            .attr("x", d => x(d.book.bib_title + " " + d.book.bib_subtitle))
+            .attr("y", d => y(d.numCheckedOut))
+            .attr("width", x.bandwidth())
+            .attr("height", d => height - y(d.numCheckedOut))
+            .attr("fill", "lightcoral")
+            //try coloring by genre instead?
     });
 
     return (
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: 3, ml: 40 }}>
             <svg ref={ref} width={width} height={height} className="noOverflow" />
         </Box>
     );
