@@ -1,0 +1,20 @@
+.noOverflow {
+    overflow: visible !important;
+    transform: translate(50px, 0px);
+}
+
+:root {
+    --axis-color: black;
+}
+
+.axisColor line {
+    stroke: var(--axis-color);
+}
+
+.axisColor path {
+    stroke:  var(--axis-color);
+}
+
+.axisColor text {
+    fill:  var(--axis-color);
+}
