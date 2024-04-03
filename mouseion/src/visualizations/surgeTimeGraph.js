@@ -58,7 +58,7 @@ export function SurgeTimeGraph() {
 
         });
 
-        let currNetBooks = 5000;
+        let currNetBooks = 0;
         let formattedLibraryDataArr = [];
 
         Object.keys(formattedLibraryData).sort((a, b) => new Date(a).getTime() - new Date(b).getTime()).forEach((key) => {
