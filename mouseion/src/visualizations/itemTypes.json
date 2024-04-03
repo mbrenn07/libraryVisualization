@@ -1,0 +1,190 @@
+[
+  {
+    "item_type": "816mm",
+    "description": "8mm 16mm"
+  },
+  {
+    "item_type": "A+A2D",
+    "description": "2D Architectural Drawing"
+  },
+  {
+    "item_type": "AUDIOCD",
+    "description": "Audio CD"
+  },
+  {
+    "item_type": "AVACC",
+    "description": "Audio/Visual Accessories"
+  },
+  {
+    "item_type": "BATTERY",
+    "description": "Mobile - Kiosk Power Charger"
+  },
+  {
+    "item_type": "BOOK",
+    "description": "Book"
+  },
+  {
+    "item_type": "CALC",
+    "description": "Mobile - Calculator"
+  },
+  {
+    "item_type": "CAMACC",
+    "description": "Mobile - Camera Accessories"
+  },
+  {
+    "item_type": "CAMERA",
+    "description": "Mobile - Camera"
+  },
+  {
+    "item_type": "CASSETTE",
+    "description": "Cassettes"
+  },
+  {
+    "item_type": "CONTROL",
+    "description": "Accessories - Controller"
+  },
+  {
+    "item_type": "DVD",
+    "description": "DVD"
+  },
+  {
+    "item_type": "ELECACC",
+    "description": "Electronic Accessories"
+  },
+  {
+    "item_type": "ERESOURCE",
+    "description": "Electronic Resource"
+  },
+  {
+    "item_type": "KEY",
+    "description": "Locker Key"
+  },
+  {
+    "item_type": "KIOSK",
+    "description": "Mobile - Kiosk"
+  },
+  {
+    "item_type": "M1M22DAY",
+    "description": "M1M2 Reserves 2 days"
+  },
+  {
+    "item_type": "M3M42WK",
+    "description": "M3M4 Reserves 2 weeks"
+  },
+  {
+    "item_type": "M3M44WK",
+    "description": "M3M4 Reserves 4 weeks"
+  },
+  {
+    "item_type": "M3M46WK",
+    "description": "M3M4 Reserves 6 weeks"
+  },
+  {
+    "item_type": "MACBOOK",
+    "description": "Mobile device - Macbook"
+  },
+  {
+    "item_type": "OPTICAL",
+    "description": "Optical disc"
+  },
+  {
+    "item_type": "PDF",
+    "description": "PDF"
+  },
+  {
+    "item_type": "PERIODICAL",
+    "description": "Periodical"
+  },
+  {
+    "item_type": "PLAYER",
+    "description": "Mobile - Player"
+  },
+  {
+    "item_type": "POPULAR",
+    "description": "Popular Reading"
+  },
+  {
+    "item_type": "PROJECTOR",
+    "description": "Mobile - Projector"
+  },
+  {
+    "item_type": "RES14DAY",
+    "description": "14 Day Loan"
+  },
+  {
+    "item_type": "RES1DAY",
+    "description": "1 Day Loan"
+  },
+  {
+    "item_type": "RES2DAY",
+    "description": "2 Day Loan"
+  },
+  {
+    "item_type": "RES2HR",
+    "description": "2 Hour Loan"
+  },
+  {
+    "item_type": "RES3DAY",
+    "description": "3 Day Loan"
+  },
+  {
+    "item_type": "RES3HR",
+    "description": "3 Hour Loan"
+  },
+  {
+    "item_type": "RES6HR",
+    "description": "6 Hour Loan"
+  },
+  {
+    "item_type": "RES7DAY",
+    "description": "7 Day Loan"
+  },
+  {
+    "item_type": "SCRIPTS",
+    "description": "Scripts"
+  },
+  {
+    "item_type": "SERIAL",
+    "description": "Serial"
+  },
+  {
+    "item_type": "SLIDES",
+    "description": "Slides"
+  },
+  {
+    "item_type": "SOFTWARE",
+    "description": "Software"
+  },
+  {
+    "item_type": "SPEC",
+    "description": "Spec in-house"
+  },
+  {
+    "item_type": "SPECSTOR",
+    "description": "SPEC material rstor"
+  },
+  {
+    "item_type": "TABLET",
+    "description": "Mobile device - Tablet"
+  },
+  {
+    "item_type": "TRIPOD",
+    "description": "Mobile - Large Tripod"
+  },
+  {
+    "item_type": "VIDEO",
+    "description": "Video"
+  },
+  {
+    "item_type": "VINYL",
+    "description": "Vinyl Records"
+  },
+  {
+    "item_type": "VTCSOM4WK",
+    "description": "VTCSoM General Stacks"
+  },
+  {
+    "item_type": "WINDOW",
+    "description": "Mobile device - Windows"
+  }
+]
