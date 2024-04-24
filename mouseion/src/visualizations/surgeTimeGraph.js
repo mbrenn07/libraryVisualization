@@ -73,17 +73,19 @@ export function SurgeTimeGraph() {
 
     const keys = ["TOTAL"];
     let other = { keys: [], total: 0 };
-    Object.keys(itemTypes).forEach((key) => {
-        if (itemTypes[key] > 50) {
+    Object.keys(itemTypes).sort((a, b) => itemTypes[b] - itemTypes[a]).forEach((key) => {
+        // if (itemTypes[key] > 50) {
+        //     keys.push(key);
+        // } else {
+        //     other.total = other.total + itemTypes[key];
+        //     other.keys.push(key);
+        // }
             keys.push(key);
-        } else {
-            other.total = other.total + itemTypes[key];
-            other.keys.push(key);
-        }
     });
-    if (other.total > 0) {
-        keys.push("OTHER");
-    }
+
+    // if (other.total > 0) {
+    //     keys.push("OTHER");
+    // }
 
     useEffect(() => {
         let currNetBooks = 0;
@@ -216,11 +218,6 @@ export function SurgeTimeGraph() {
 
         //creating the legend
 
-        // Usually you have a color scale in your chart already
-        const color = d3.scaleOrdinal()
-            .domain(keys)
-            .range(d3.schemeSet2);
-
         const onTypeSelected = (type) => {
             if (type === "OTHER") {
                 return;
@@ -242,7 +239,13 @@ export function SurgeTimeGraph() {
             .attr("cx", 10)
             .attr("cy", function (d, i) { return 15 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("r", 7)
-            .style("fill", function (d) { return color(d) })
+            .style("fill", (d) => {
+                return d === currKey.toUpperCase() ? "#008DDA" : "#000000"
+            })
+            .style("stroke", (d) => {
+                return d === currKey.toUpperCase() ? "#008DDA" : "#000000"
+            })
+            .attr("shape-rendering", "geometricPrecision")
             .on('click', function (d, i) { onTypeSelected(i) });
 
         // Add one dot in the legend for each name.
@@ -252,9 +255,10 @@ export function SurgeTimeGraph() {
             .append("text")
             .attr("x", 25)
             .attr("y", function (d, i) { return 15 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
-            .style("fill", function (d) { return color(d) })
+            .style("fill", (d) => d === currKey.toUpperCase() ? "#008DDA" : "#000000" )
             .text(function (d) { return d })
             .attr("text-anchor", "left")
+            .attr("text-rendering", "optimizeLegibility")
             .style("alignment-baseline", "middle")
             .on('click', function (d, i) { onTypeSelected(i) });
 
