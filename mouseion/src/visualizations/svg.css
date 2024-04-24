@@ -18,3 +18,7 @@
 .axisColor text {
     fill:  var(--axis-color);
 }
+
+.legend:hover {
+    opacity: 1;
+}
