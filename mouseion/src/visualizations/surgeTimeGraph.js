@@ -121,7 +121,7 @@ export function SurgeTimeGraph() {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .attr("class", "axisColor")
-            .style("font-size", "1.5em");
+            .style("font-size", "1.3vw");
 
         // Add Y axis
         const y = d3.scaleLinear()
