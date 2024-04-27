@@ -72,22 +72,12 @@ export function SurgeTimeGraph() {
 
     const [currKey, setCurrKey] = useState("total");
     const [pieChartData, setPieChartData] = useState({});
+    const [pieChartTitle, setPieChartTitle] = useState("Total");
 
     const keys = ["TOTAL"];
-    let other = { keys: [], total: 0 };
     Object.keys(itemTypes).sort((a, b) => itemTypes[b] - itemTypes[a]).forEach((key) => {
-        // if (itemTypes[key] > 50) {
-        //     keys.push(key);
-        // } else {
-        //     other.total = other.total + itemTypes[key];
-        //     other.keys.push(key);
-        // }
             keys.push(key);
     });
-
-    // if (other.total > 0) {
-    //     keys.push("OTHER");
-    // }
 
     useEffect(() => {
         let currNetBooks = 0;
@@ -101,6 +91,17 @@ export function SurgeTimeGraph() {
         })
     
         formattedLibraryDataArr = formattedLibraryDataArr.slice(0, 355);
+
+        let data = [0,0,0];
+        formattedLibraryDataArr.forEach((entry) => {
+            data[0] = data[0] + (entry.checkout?.[currKey] ?? 0);
+            data[1] = data[1] + (entry.return?.[currKey] ?? 0);
+            data[2] = data[2] + (entry.renewal?.[currKey] ?? 0);
+        });
+
+
+        setPieChartData({checkout: data[0], return: data[1], renew: data[2]});
+        setPieChartTitle("Total");
 
         let svgElement = d3.select(ref.current);
         const legendElement = d3.select(legendRef.current);
@@ -148,7 +149,8 @@ export function SurgeTimeGraph() {
             .attr("height", d => height - yCheckouts(d.checkout[currKey]))
             .attr("fill", "#B0C5A4")
             .on("click", function(event, info){
-                setPieChartData({checkout: info.checkout?.total ?? 0, return: info.return?.total ?? 0, renew:info.renewal?.total ?? 0})
+                setPieChartTitle((info.date.getMonth() + 1) + '/' + ((info.date.getDate().toString().length > 1) ? info.date.getDate() : ('0' + info.date.getDate())) + '/' + info.date.getFullYear());
+                setPieChartData({checkout: info.checkout?.[currKey] ?? 0, return: info.return?.[currKey] ?? 0, renew:info.renewal?.[currKey] ?? 0})
             });
 
         
@@ -164,7 +166,8 @@ export function SurgeTimeGraph() {
             .attr("height", d => height - yCheckouts(d.return[currKey]))
             .attr("fill", "#D37676")
             .on("click", function(event, info){
-                setPieChartData({checkout: info.checkout?.total ?? 0, return: info.return?.total ?? 0, renew:info.renewal?.total ?? 0})
+                setPieChartTitle((info.date.getMonth() + 1) + '/' + ((info.date.getDate().toString().length > 1) ? info.date.getDate() : ('0' + info.date.getDate())) + '/' + info.date.getFullYear());
+                setPieChartData({checkout: info.checkout?.[currKey] ?? 0, return: info.return?.[currKey] ?? 0, renew:info.renewal?.[currKey] ?? 0})
             });
             
 
@@ -179,7 +182,8 @@ export function SurgeTimeGraph() {
             .attr("height", d => height - yCheckouts(d.renewal[currKey]))
             .attr("fill", "#F1EF99")
             .on("click", function(event, info){
-                setPieChartData({checkout: info.checkout?.total ?? 0, return: info.return?.total ?? 0, renew:info.renewal?.total ?? 0})
+                setPieChartTitle((info.date.getMonth() + 1) + '/' + ((info.date.getDate().toString().length > 1) ? info.date.getDate() : ('0' + info.date.getDate())) + '/' + info.date.getFullYear());
+                setPieChartData({checkout: info.checkout?.[currKey] ?? 0, return: info.return?.[currKey] ?? 0, renew:info.renewal?.[currKey] ?? 0})
             });
 
         // Add the line
@@ -204,14 +208,13 @@ export function SurgeTimeGraph() {
             .attr("transform", "translate(" + (width + 1) + ",0)")
             .style("font-size", "1.5em");
 
-
         svgElement.append("text")
             .attr("text-anchor", "middle")
             .attr("font-family", "Roboto")
             .attr("font-size", "2em")
             .attr("x", width / 2)
             .attr("y", height + 70)
-            .text("2023 - 2024 School Year");
+            .text("Library Activity During 2022 - 2023 School Year");
 
         svgElement.append("text")
             .attr("text-anchor", "middle")
@@ -290,19 +293,28 @@ export function SurgeTimeGraph() {
             .value(function (d) { return d; })
         pieElement.selectAll("*").remove();
         let data_ready = pie(Object.values(pieChartData))
-        var color = d3.scaleOrdinal()
+        const colors = ["#B0C5A4", "#D37676","#F1EF99"]
+        const color = d3.scaleOrdinal()
             .domain(Object.keys(pieChartData))
-            .range(["#B0C5A4", "#D37676","#F1EF99"])
-        var colors = ["#B0C5A4", "#D37676","#F1EF99"]
-        var names = ["Checkout", "Returns", "Renewals"]
+            .range(colors)
+        const names = ["Checkouts", "Returns", "Renewals"]
         // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+        console.log(pieChartTitle);
+        pieElement.append("text")
+            .attr("text-anchor", "middle")
+            .attr("font-family", "Roboto")
+            .attr("font-size", "1.5em")
+            .attr("x", 120)
+            .attr("y", 30)
+            .text(pieChartTitle);
+
         pieElement
             .append("svg")
             .attr("width", 300)
             .attr("height", 300)
             .append("g")
             .style("overflow", "visible")
-            .attr("transform", "translate(62.5, 62.5)")
+            .attr("transform", "translate(62.5, 98.5)")
             .selectAll('whatever')
             .data(data_ready)
             .enter()
@@ -321,7 +333,7 @@ export function SurgeTimeGraph() {
             .enter()
             .append("circle")
             .attr("cx", 140)
-            .attr("cy", function (d, i) { return 25 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("cy", function (d, i) { return 55 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("r", 7)
             .style("fill", function (d, i){
                 return colors[i]
@@ -332,7 +344,7 @@ export function SurgeTimeGraph() {
             .enter()
             .append("text")
             .attr("x", 155)
-            .attr("y", function (d, i) { return 25 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("y", function (d, i) { return 55 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
             .text(function (d) { return d })
             .attr("text-anchor", "left")
             .attr("text-rendering", "optimizeLegibility")
@@ -343,13 +355,13 @@ export function SurgeTimeGraph() {
             .enter()
             .append("text")
             .attr("x", 155)
-            .attr("y", function (d, i) { return 40 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("y", function (d, i) { return 70 + i * 35 }) // 100 is where the first dot appears. 25 is the distance between dots
             .text(function (d) { return d.data })
             .attr("text-anchor", "left")
             .attr("text-rendering", "optimizeLegibility")
             .style("alignment-baseline", "middle")
 
-    }, [pieChartData]);
+    }, [pieChartData, pieChartTitle]);
 
 
     return (
@@ -358,7 +370,7 @@ export function SurgeTimeGraph() {
             <Box sx={{ position: "absolute", top: "0%", left: "100%", transform: "translate(-305px, 30px)", overflow: "auto", height: 300, border: "2px solid black", opacity: .4 }} className="legend">
                 <svg ref={legendRef} width={150} />
             </Box>
-            <Box sx={{ position: "absolute", top: "0%", left: "0%", transform: "translate(150px, 30px)", overflow: "clip", height: 125, border: "2px solid black", opacity: 1 }} className="legend">
+            <Box sx={{ position: "absolute", top: "0%", left: "0%", transform: "translate(150px, 30px)", overflow: "clip", height: 155, border: "2px solid black", opacity: 1 }} className="legend">
                 <svg ref={pieRef} width={240} />
             </Box>
         </Box>
