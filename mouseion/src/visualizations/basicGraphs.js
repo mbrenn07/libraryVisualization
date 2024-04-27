@@ -5,6 +5,8 @@ import libraryData from "./22-23libraryData.json";
 import styling from "./svg.css";
 
 
+
+
 //Line plot of year to number of tickets
 export function MostCheckedOutBooksBarChart() {
 
@@ -94,6 +96,7 @@ export function MostCheckedOutBooksBarChart() {
             .attr("fill", "lightcoral") //try coloring by genre instead?
             .append('title')
             .text(d => "Copyright: " + d.book.bib_copyright_date + "\nTags: " + d.book.bib_subject_terms + "\nAbstract: " + d.book.bib_abstract)
+            
     });
 
     return (
