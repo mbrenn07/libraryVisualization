@@ -223,7 +223,7 @@ export function SurgeTimeGraph() {
             .attr("font-size", "2em")
             .attr("x", (-height / 2))
             .attr("y", -95)
-            .text("Items Currently Checked Out");
+            .text("Items Currently Checked Out (Line)");
 
         svgElement.append("text")
             .attr("text-anchor", "middle")
@@ -232,7 +232,7 @@ export function SurgeTimeGraph() {
             .attr("font-size", "2em")
             .attr("x", (-height / 2))
             .attr("y", width + 90)
-            .text("Checkouts, Returns, and Renewals");
+            .text("Checkouts, Returns, and Renewals (Bar)");
 
         //creating the legend
 
